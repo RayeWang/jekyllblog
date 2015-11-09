@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{ page.title }}</title>
+    {% if page.excerpt %}<meta name="description" content='{{ page.excerpt | remove: '<p>' | remove: '</p>'  }}'>{% endif %}
+    <meta name="author" content="{{ site.author.name }}">
+
+    <!-- Enable responsive viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="java,android,javaee,database,mysql,oracle,nginx">
+    <meta name="description" content="Raye blog android,javaee,数据库相关文章">
+
+
+
+    <link href="{{site.url}}/assets/themes/twitter/css/pygments.css" rel="stylesheet" type="text/css">
+    <link href="{{site.url}}/assets/themes/twitter/bootstrap/css/bootstrap.2.2.2.min.css" rel="stylesheet">
+    <link href="{{site.url}}/assets/themes/twitter/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
+    <link href="{{site.url}}/assets/themes/twitter/css/main.css" rel="stylesheet" type="text/css">
+    <script src="{{site.url}}/assets/themes/twitter/js/prettify.js"  async ="true"></script>
+    <script src="{{site.url}}/assets/themes/twitter/js/scrollandler.js" defer="true"></script>
+  
+    <link href="{{ BASE_PATH }}{{ site.JB.atom_path }}" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="{{ BASE_PATH }}{{ site.JB.rss_path }}" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-inner">
+       <div class="nav-narrow">
+          <a class="brand" href="{{ HOME_PATH }}"><span class="fa fa-mortar-board (alias)">{{ site.title }}</span></a>
+          <ul class="nav">
+            {% assign pages_list = site.pages %}
+            {% assign group = 'navigation' %}
+            {% include JB/pages_list %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-narrow">
+
+      <div class="content">
+        {{ content }}
+      </div>
+      
+      <footer class="card clearfix">
+        <span style="font-size:30px;"class="fa fa-github pull-left"></span><a href="https://github.com/rayewang" style="display:inline-block;padding-right:80px;border-right:1px solid #bbb">Raye Wang GitHub</a>
+        <p class="pull-right">&copy; 2015 {{ site.author.name }}
+          
+        </p>
+        
+      </footer>
+
+    </div>
+
+    {% include JB/analytics %}
+  </body>
+</html>

@@ -1,0 +1,21 @@
+---
+layout: post
+title:  "我的第一个jekyll博文!"
+date:   2015-11-05 05:52:15
+categories: test java
+tags: testTag tag
+---
+这是我的第一个jekyll博文
+
+测试java代码高亮:
+
+{% highlight c++ linenos %}
+public void main(){
+    //hello world
+    System.out.println("hello world");
+}
+{% endhighlight %}
+
+测试[百度]链接
+
+[百度]: http://www.baidu.com

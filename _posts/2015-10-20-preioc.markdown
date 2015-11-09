@@ -1,0 +1,124 @@
+---
+layout: post
+title:  "PreIOC全新的极简适配器编写方式"
+date:   2015-10-20 11:02:15
+categories: Android开发
+tags: AndroidStudio PreIOC
+---
+PreIOC是一款预编译的注解框架，能够提供无限接近于原生的速度和消耗，具体测试结果可以去项目的git主页查看
+
+国内git（oschina）：<a href="http://git.oschina.net/raywang2014/PreIOC" target="_blank">http://git.oschina.net/raywang2014/PreIOC</a>
+
+github:<a href="https://github.com/RayeWang/PreIOC" target="_blank">https://github.com/RayeWang/PreIOC</a>
+
+##### 首先引用PreIOC
+
+##### Android Studio
+{% highlight c++ linenos%}
+compile 'wang.raye.preioc:preioccore:1.0.4'
+{% endhighlight %}
+#####  Maven
+{% highlight xml linenos%}
+<dependency>
+    <groupId>wang.raye.preioc</groupId>
+    <artifactId>preioccore</artifactId>
+    <version>1.0.4</version>
+</dependency>
+{% endhighlight %}
+##### Eclipse
+<a href="http://git.oschina.net/raywang2014/PreIOC/raw/master/Annotation/app/libs/PreIOC-0.0.4.jar" target="_blank">下载Jar</a>,具体配置请参考http://git.oschina.net/raywang2014/PreIOC/wikis/Eclipse%E5%BC%95%E7%94%A8
+#####  极简Adapter使用
+首先创建一个Adapter类，继承PreAdapter<T>，其中T是getItem返回的类型的，也就是数据bean的类。
+
+创建一个ViewHolder类
+{% highlight java linenos%}
+@BindViewHolder(R.layout.item)
+static class ViewHolder {
+    @BindById(R.id.name)
+    @BindData(value = "name")
+    TextView name;
+    @BindById(R.id.format)
+    @BindData(format = "format")
+    TextView format;
+}
+{% endhighlight %}
+其中@BindViewHolder代表这是一个ViewHolder的类，注解的值是这个ViewHolder的布局id
+
+  @BindById是指定当前控件对象于布局中的哪个id的控件进行绑定
+
+  @BindData是进行数据绑定的注解，其中value是<T>的属性名称，比如
+{% highlight java linenos%}
+@BindData(value = "name")
+TextView name;
+{% endhighlight %}
+ 设置的时候相当于
+{% highlight java linenos%}
+name.setText(getItem(position).getName());
+{% endhighlight %}
+format的值是Adapter中的方法名，该方法必须返回String对象，参数必须是(int)，如
+{% highlight java linenos%}
+    @BindData(format = "format")
+    TextView format;
+{% endhighlight %}
+ 则相当于
+{% highlight java linenos%}
+format.setText(format(position));
+{% endhighlight %}
+##### 关于构造函数
+
+##### PreAdapter需要传入context，数据ArrayList，和ViewHolder的class
+下面是整个Adapter的代码
+{% highlight java linenos%}
+package wang.raye.preiocdemo;
+
+import android.content.Context;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+
+import wang.raye.preioc.PreAdapter;
+import wang.raye.preioc.annotation.BindById;
+import wang.raye.preioc.annotation.BindData;
+import wang.raye.preioc.annotation.BindViewHolder;
+
+/**
+ * Created by raye on 15-10-18.
+ */
+
+public class Adapter extends PreAdapter<Bean>{
+    public Adapter(ArrayList<Bean> datas, Context context) {
+        super(datas, context, ViewHolder.class);
+    }
+    protected String format(int position){
+        return "format:"+position;
+    }
+    @BindViewHolder(R.layout.item)
+    static class ViewHolder {
+        @BindById(R.id.name)
+        @BindData(value = "name")
+        TextView name;
+        @BindById(R.id.format)
+        @BindData(format = "format")
+        TextView format;
+    }
+
+}
+{% endhighlight %}
+##### XML布局
+{% highlight xml linenos%}
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+    <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/name"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/format"
+        android:gravity="center"/>
+</LinearLayout>
+{% endhighlight %}
+项目的整个demo都在PreIOC的git里面，有兴趣可以去下载看看，交流群：123965382
